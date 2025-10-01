@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: url("{{ url_for('static',  filename='Background cover/bgcover.jpeg') }}") no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            width: 400px;
+        }
+        .upload-box {
+            border: 2px dashed #0078ff;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            color: #444;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.8);
+            transition: 0.3s;
+        }
+        .upload-box:hover { background: rgba(0, 120, 255, 0.1); }
+        input[type="file"] { display: none; }
+        .btn {
+            margin-top: 60px;
+            padding: 12px 25px;
+            color: #fff;
+            background: #0078ff;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover { background: #005fcc; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Upload an Image</h2>
+        <form action="{{ url_for('predict') }}" method="POST" enctype="multipart/form-data">
+            <label for="file-upload" class="upload-box">
+                Drag & Drop Image Here<br>or Click to Browse
+            </label>
+            <input id="file-upload" type="file" name="image" required>
+            <br>
+            <button type="submit" class="btn">Predict</button>
+        </form>
+    </div>
+</body>
+</html>

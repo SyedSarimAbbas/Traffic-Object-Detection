@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Vision - Home</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: url("{{ url_for('static',  filename='Background cover/bgcover.jpeg') }}") no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+       .btn {
+        padding: 12px 25px;
+        font-size: 16px;
+        color: #fff;
+        background: #0078ff;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 20px;  /* <-- adds space above button */
+    }
+
+        .btn:hover { background: #005fcc; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Vision</h1>
+        <p>Detect vehicles with AI instantly.</p>
+        <a href="{{ url_for('predict_page') }}" class="btn">Start Predicting</a>
+    </div>
+</body>
+</html>
