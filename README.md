@@ -1,11 +1,11 @@
-# 🚦 Traffic Detection with YOLO + Flask
+#  Traffic Detection with YOLO + Flask
 
 This project is a **web application** built with **Flask** and **YOLOv8** that allows users to upload images and detect vehicles in them.  
 It provides an easy-to-use interface where predictions are displayed directly on the uploaded image.
 
 ---
 
-## 📌 Features
+##  Features
 - Upload an image and get **vehicle detections** using a trained YOLO model.  
 - Results are shown with **bounding boxes** directly on the image.  
 - Clean **HTML/CSS UI** with background customization.  
@@ -13,7 +13,7 @@ It provides an easy-to-use interface where predictions are displayed directly on
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 - **Python 3.10+**
 - **Flask**
 - **Ultralytics YOLOv11**
@@ -21,7 +21,7 @@ It provides an easy-to-use interface where predictions are displayed directly on
 
 ---
 
-## 🚀 Project Structure
+##  Project Structure
 Traffic Detection Project/
 │── app.py # Flask app
 │── requirements.txt # Python dependencies
@@ -46,7 +46,7 @@ Copy code
    ```bash
    git clone https://github.com/SyedSarimAbbas/Traffic-Object-Detection.git
    cd traffic-detection
-Install dependencies:
+##Install dependencies:
 
 bash
 Copy code
@@ -62,7 +62,7 @@ cpp
 Copy code
 http://127.0.0.1:5000
 
-🌐 Deployment on Hugging Face Spaces
+## 🌐 Deployment on Hugging Face Spaces
 Create a new Space (SDK: Flask).
 
 Push this repo to your Hugging Face Space.
