@@ -3,62 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Image</title>
+    <title>Upload Image - AI Vision</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: url("{{ url_for('static',  filename='Background cover/bgcover.jpeg') }}") no-repeat center center fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url("{{ url_for('static', filename='Background cover/bgcover.jpeg') }}") no-repeat center center fixed;
             background-size: cover;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
+
         .container {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            width: 400px;
-        }
-        .upload-box {
-            border: 2px dashed #0078ff;
+            background: rgba(255, 255, 255, 0.95);
             padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #0078ff;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .upload-box {
+            border: 3px dashed #0078ff;
+            padding: 50px 20px;
             border-radius: 12px;
             text-align: center;
             cursor: pointer;
             color: #444;
             font-size: 16px;
             background: rgba(255, 255, 255, 0.8);
-            transition: 0.3s;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        .upload-box:hover { background: rgba(0, 120, 255, 0.1); }
-        input[type="file"] { display: none; }
+
+        .upload-box:hover {
+            background: rgba(0, 120, 255, 0.1);
+            border-color: #005fcc;
+        }
+
+        .upload-box.drag-over {
+            background: rgba(0, 120, 255, 0.2);
+            border-color: #005fcc;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #0078ff;
+        }
+
+        .upload-text {
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .preview-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .file-name {
+            margin-top: 10px;
+            color: #555;
+            font-size: 14px;
+            word-break: break-word;
+        }
+
         .btn {
-            margin-top: 60px;
-            padding: 12px 25px;
+            margin-top: 25px;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 500;
             color: #fff;
-            background: #0078ff;
+            background: linear-gradient(135deg, #0078ff, #005fcc);
             border-radius: 8px;
             border: none;
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 120, 255, 0.3);
         }
-        .btn:hover { background: #005fcc; }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #005fcc, #004799);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 120, 255, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #0078ff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #005fcc;
+            text-decoration: underline;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h2 {
+                font-size: 1.6em;
+            }
+
+            .upload-box {
+                padding: 40px 15px;
+            }
+
+            .btn {
+                padding: 12px 28px;
+                font-size: 15px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Upload an Image</h2>
-        <form action="{{ url_for('predict') }}" method="POST" enctype="multipart/form-data">
-            <label for="file-upload" class="upload-box">
-                Drag & Drop Image Here<br>or Click to Browse
+        <h2>📤 Upload an Image</h2>
+        <form action="{{ url_for('predict') }}" method="POST" enctype="multipart/form-data" id="upload-form">
+            <label for="file-upload" class="upload-box" id="upload-box">
+                <div class="upload-icon">📷</div>
+                <div class="upload-text">
+                    Drag & Drop Image Here<br>or Click to Browse
+                </div>
             </label>
-            <input id="file-upload" type="file" name="image" required>
-            <br>
-            <button type="submit" class="btn">Predict</button>
+            <input id="file-upload" type="file" name="image" accept="image/*" required>
+            
+            <div class="preview-container" id="preview-container">
+                <img id="preview-image" class="preview-image" alt="Preview">
+                <div class="file-name" id="file-name"></div>
+            </div>
+
+            <button type="submit" class="btn" id="submit-btn" disabled>Predict</button>
         </form>
+        <a href="{{ url_for('index') }}" class="back-link">← Back to Home</a>
     </div>
+
+    <script>
+        const fileUpload = document.getElementById('file-upload');
+        const uploadBox = document.getElementById('upload-box');
+        const previewContainer = document.getElementById('preview-container');
+        const previewImage = document.getElementById('preview-image');
+        const fileName = document.getElementById('file-name');
+        const submitBtn = document.getElementById('submit-btn');
+
+        // Click to upload
+        uploadBox.addEventListener('click', () => fileUpload.click());
+
+        // File selection handler
+        fileUpload.addEventListener('change', handleFileSelect);
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                displayPreview(file);
+            }
+        }
+
+        function displayPreview(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImage.src = e.target.result;
+                previewContainer.style.display = 'block';
+                fileName.textContent = file.name;
+                submitBtn.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Drag and drop functionality
+        uploadBox.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadBox.classList.add('drag-over');
+        });
+
+        uploadBox.addEventListener('dragleave', () => {
+            uploadBox.classList.remove('drag-over');
+        });
+
+        uploadBox.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadBox.classList.remove('drag-over');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type.startsWith('image/')) {
+                fileUpload.files = files;
+                displayPreview(files[0]);
+            }
+        });
+    </script>
 </body>
 </html>

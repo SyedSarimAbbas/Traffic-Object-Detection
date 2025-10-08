@@ -1,3 +1,5 @@
-flask
-ultralytics
+numpy<2
 torch
+ultralytics
+flask
+opencv-python

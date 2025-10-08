@@ -3,47 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prediction Result</title>
+    <title>Prediction Result - AI Vision</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: url("{{ url_for('static',  filename='Background cover/bgcover.jpeg') }}") no-repeat center center fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url("{{ url_for('static', filename='Background cover/bgcover.jpeg') }}") no-repeat center center fixed;
             background-size: cover;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-        }
-        .container {
-            background: rgba(255, 255, 255, 0.9);
             padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            max-width: 900px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #0078ff;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .result-image-container {
+            margin: 20px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            background: #f8f9fa;
+        }
+
         img {
             max-width: 100%;
-            border-radius: 10px;
+            height: auto;
+            display: block;
+            border-radius: 12px;
         }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
         .btn {
-        padding: 12px 25px;
-        font-size: 16px;
-        color: #fff;
-        background: #0078ff;
-        border-radius: 8px;
-        text-decoration: none;
-        display: inline-block;
-        margin-top: 20px;  /* <-- adds space above button */
-    }
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #fff;
+            background: linear-gradient(135deg, #0078ff, #005fcc);
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 120, 255, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #005fcc, #004799);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 120, 255, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #5a6268, #4e555b);
+            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            font-size: 14px;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #28a745, #218838);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(135deg, #218838, #1e7e34);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .icon {
+            margin-right: 5px;
+        }
+
+        /* Loading state */
+        .loading {
+            display: none;
+            color: #0078ff;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h2 {
+                font-size: 1.6em;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                padding: 12px 28px;
+                font-size: 15px;
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Prediction Result</h2>
-        <img src="{{ url_for('static', filename=result_image) }}" alt="Predicted Image">
-        <br>
-        <a href="{{ url_for('predict_page') }}" class="btn">Try Another</a>
+        <h2>✅ Prediction Result</h2>
+        
+        <div class="success-message">
+            Vehicle detection completed successfully!
+        </div>
+
+        <div class="result-image-container">
+            <img src="{{ url_for('static', filename=result_image) }}" alt="Detected Vehicles" id="result-img">
+        </div>
+
+        <div class="button-group">
+            <a href="{{ url_for('static', filename=result_image) }}" download class="btn download-btn">
+                <span class="icon">💾</span> Download Result
+            </a>
+            <a href="{{ url_for('predict_page') }}" class="btn">
+                <span class="icon">🔄</span> Try Another
+            </a>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                <span class="icon">🏠</span> Back to Home
+            </a>
+        </div>
+
+        <div class="loading" id="loading">
+            Processing...
+        </div>
     </div>
+
+    <script>
+        // Image load error handler
+        const resultImg = document.getElementById('result-img');
+        resultImg.addEventListener('error', function() {
+            this.alt = 'Failed to load result image';
+            this.style.background = '#f8d7da';
+            this.style.color = '#721c24';
+            this.style.padding = '50px';
+            this.style.border = '2px solid #f5c6cb';
+        });
+
+        // Optional: Add animation when image loads
+        resultImg.addEventListener('load', function() {
+            this.style.opacity = '0';
+            this.style.transition = 'opacity 0.5s ease-in';
+            setTimeout(() => {
+                this.style.opacity = '1';
+            }, 100);
+        });
+    </script>
 </body>
 </html>
